@@ -2,19 +2,32 @@ import requests
 import random
 from bs4 import BeautifulSoup
 
-cuvant = input("Zi un cuvant: ")
+limita_cuvinte = 15
+animale = ["rechin", "urs", "cal", "marmota", "catel", "bou", "leu"]
 
-print("- Ce fel de %s?"%cuvant)
+while True:
+    cuvant = input("Zi un cuvant: ")
 
-r = requests.get("https://www.rimeaza.ro/cuvinte-care-rimeaza-cu-%s.html"%cuvant)
-soup = BeautifulSoup(r.content, 'html5lib')
+    print("- Ce fel de %s?"%cuvant)
 
-arr = []
+    r = requests.get("https://www.rimeaza.ro/cuvinte-care-rimeaza-cu-%s.html"%cuvant)
+    soup = BeautifulSoup(r.content, 'html5lib')
 
-for crti in soup.findAll("div", attrs = {"class" : "container_rime"}):
-    for crtj in crti.findAll("a"):
-        arr.append(crtj.text)
+    arr = []
+    nr_cuvinte = 0
 
-rima = random.choice(arr)
+    for crti in soup.findAll("div", attrs = {"class" : "container_rime"}):
+        for crtj in crti.findAll("a"):
+            nr_cuvinte += 1
+            if nr_cuvinte <= limita_cuvinte:
+                arr.append(crtj.text)
 
-print("- De belit pula la %s"%rima)
+    rima = random.choice(arr)
+    for cuv in arr:
+        if cuv in animale:
+            rima = cuv
+            break
+
+
+    print("- De belit pula la %s"%rima)
+    print("=====================================")
